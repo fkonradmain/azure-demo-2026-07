@@ -21,7 +21,7 @@ resource "azurerm_role_assignment" "aks_node_network_contributor" {
 # The two identities are then mapped to specific service accounts in specific namespaces through identity federation
 # privileged identity
 resource "azurerm_user_assigned_identity" "aks_privileged_workload_identity" {
-  name                = "${azurerm_kubernetes_cluster.workload_aks.name}-privileged-workload-identity"
+  name                = "${azurerm_kubernetes_cluster.workload_aks.name}-privileged-identity"
   location            = var.azure_location
   resource_group_name = var.azure_rg_name
 }
@@ -34,7 +34,7 @@ resource "azurerm_role_assignment" "aks_workload_vault_admin" {
 
 # unprivileged identity
 resource "azurerm_user_assigned_identity" "aks_unprivileged_workload_identity" {
-  name                = "${azurerm_kubernetes_cluster.workload_aks.name}-unprivileged-workload-identity"
+  name                = "${azurerm_kubernetes_cluster.workload_aks.name}-unprivileged-identity"
   location            = var.azure_location
   resource_group_name = var.azure_rg_name
 }
@@ -42,33 +42,33 @@ resource "azurerm_user_assigned_identity" "aks_unprivileged_workload_identity" {
 resource "azurerm_role_assignment" "aks_workload_vault_read" {
  scope                = var.aks_keyvault_id
  role_definition_name = "Key Vault Secrets User"
- principal_id         = azurerm_user_assigned_identity.aks_privileged_workload_identity.principal_id
+ principal_id         = azurerm_user_assigned_identity.aks_unprivileged_workload_identity.principal_id
 }
 
-# Retrieve Tenant ID for creating a vault access policy
-data "azurerm_client_config" "current" {}
-
-# Grant access to the keyvault via access policy
-# TODO: check if this actually is a duplicate with the role assignment above
-resource "azurerm_key_vault_access_policy" "aks_vault_access" {
-  key_vault_id = var.aks_keyvault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_user_assigned_identity.aks_identity.principal_id
-
-  key_permissions = [
-    "Backup", "Create", "Decrypt", "Delete", "Encrypt", "Get", "Import", "List", "Purge", "Recover", "Restore", "Sign", "UnwrapKey", "Update", "Verify", "WrapKey", "Release", "Rotate", "GetRotationPolicy", "SetRotationPolicy",
-  ]
-
-  secret_permissions = [
-    "Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set",
-  ]
+locals {
+  privileged_namespaces = ["kube-system","kube-node-lease","external-secrets"]
+  unprivileged_namespaces = ["default","demo","kube-public"]
+  service_account_name = "workload-identity-sa"
 }
 
-# Federate service account in the cluster
-resource "azurerm_federated_identity_credential" "external_secrets_federated_credential" {
-  name                      = "aks-federated-credential-external-secrets-${var.app_stage}"
+# Federate privileged service accounts in the cluster
+resource "azurerm_federated_identity_credential" "privileged_sa_federated_credential" {
+  for_each = { for _,item in local.privileged_namespaces : item => item }
+  name                      = "aks-privileged-federated-credential-${each.value}-${var.app_stage}"
   audience                  = ["api://AzureADTokenExchange"]
   issuer                    = azurerm_kubernetes_cluster.workload_aks.oidc_issuer_url
-  user_assigned_identity_id = azurerm_user_assigned_identity.aks_identity.id
-  subject                   = "system:serviceaccount:external-secrets:workload-identity-sa" # TODO: use variables for service account naming
+  user_assigned_identity_id = azurerm_user_assigned_identity.aks_privileged_workload_identity.id
+  subject                   = "system:serviceaccount:${each.value}:${local.service_account_name}"
 }
+
+# Federate unprivileged service accounts in the cluster
+resource "azurerm_federated_identity_credential" "unprivileged_sa_federated_credential" {
+  for_each = { for _,item in local.unprivileged_namespaces : item => item }
+  name                      = "aks-unprivileged-federated-credential-${each.value}-${var.app_stage}"
+  audience                  = ["api://AzureADTokenExchange"]
+  issuer                    = azurerm_kubernetes_cluster.workload_aks.oidc_issuer_url
+  user_assigned_identity_id = azurerm_user_assigned_identity.aks_unprivileged_workload_identity.id
+  subject                   = "system:serviceaccount:${each.value}:${local.service_account_name}"
+}
+
+# TODO: Deloy the respective "workload-identity-sa" kubernetes service accounts in the namespaces for which these roles have just been assigned

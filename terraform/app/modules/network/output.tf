@@ -7,5 +7,9 @@ output "private_endpoints_dns_zone_id" {
 }
 
 output "subnets" {
-    value = local.subnets
+  value = {
+        "aks_node" = { "id" = azurerm_subnet.aks_node.id }
+        "aks_api" = { "id" = azurerm_subnet.aks_api.id }
+        "private_endpoints" = { "id" = azurerm_subnet.private_endpoints.id }
+    }
 }

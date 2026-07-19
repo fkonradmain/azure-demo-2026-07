@@ -28,7 +28,7 @@ resource "azurerm_key_vault" "aks_keyvault" {
   # Limit network acess to the vault only to the assigned users
   # TODO: configure vault network acls correctly
   network_acls {
-    default_action = "Allow" # TODO: revert to "Deny"
+    default_action = "Deny" # TODO: revert to "Deny"
     # TODO: check if we should really allow azureservices to bypass
     bypass = "AzureServices"
 
@@ -38,11 +38,11 @@ resource "azurerm_key_vault" "aks_keyvault" {
 }
 
 # TODO: this is only an interim role to give all employees vault access. Remove it after testing
-# resource "azurerm_role_assignment" "local_user_vault_admin" {
-#  scope                = azurerm_key_vault.aks_keyvault.id
-#  role_definition_name = "Key Vault Secrets Officer"
-#  principal_id         = "90bab22c-b512-44b9-aff4-9b787893291a" # All users user group
-# }
+resource "azurerm_role_assignment" "fk_vault_admin" {
+ scope                = azurerm_key_vault.aks_keyvault.id
+ role_definition_name = "Key Vault Administrator"
+ principal_id         = "90bab22c-b512-44b9-aff4-9b787893291a" # All users user group
+}
 
 resource "azurerm_private_endpoint" "keyvault_endpoint" {
   name                = "keyvault-endpoint-${var.app_stage}"

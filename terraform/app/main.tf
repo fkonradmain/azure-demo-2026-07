@@ -19,11 +19,6 @@ module "keyvault" {
     subnets = module.network.subnets
 }
 
-# import {
-#   id ="/subscriptions/4b01b122-02ef-440c-a7d0-85cf2a54b7a9/resourceGroups/RG-Fabian-Konrad/providers/Microsoft.ContainerService/managedClusters/app-workload-aks-dev"
-#   to = module.aks.azurerm_kubernetes_cluster.workload_aks
-# }
-
 module "aks" {
     source = "./modules/aks"
     depends_on = [
@@ -38,4 +33,20 @@ module "aks" {
     aks_keyvault_id = module.keyvault.aks_keyvault_id
     subnets = module.network.subnets
     # private_endpoints_dns_zone_id = 
+}
+
+module "storage" {
+    source = "./modules/storage"
+    depends_on = [
+        module.network
+    ]
+    
+    azure_rg_name = data.azurerm_resource_group.app_rg.name
+    azure_location = data.azurerm_resource_group.app_rg.location
+    app_stage = var.app_stage
+
+
+    private_endpoints_dns_zone_id = module.network.private_endpoints_dns_zone_id
+    aks_keyvault_id = module.keyvault.aks_keyvault_id
+    subnets = module.network.subnets
 }

@@ -15,12 +15,6 @@ data "azurerm_resource_group" "app_rg" {
 variable "app_stage" {
     type = string
     const = true
+    description = "Name of the application stage that is currently being deployed"
     # default = "dev"
 }
-
-# # Suffix for global resources - to allow defining them without collissions
-# resource "random_string" "app_suffix" {
-#  length  = 5
-#  special = false
-#  upper   = false
-# }
