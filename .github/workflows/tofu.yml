@@ -21,8 +21,8 @@ jobs:
       ARM_TENANT_ID: "b2748d0a-856e-4184-bda8-831f9ffa8a48"
       ARM_CLIENT_ID: "e6b7ba11-9782-456c-a8c1-b92b77d18be3"
       # TODO: import TF_VAR variables as github environment variables
-      TF_VAR_azure_rg_name: '"RG-Fabian-Konrad"'
-      TF_VAR_app_stage: '"dev"'
+      TF_VAR_azure_rg_name: "RG-Fabian-Konrad"
+      TF_VAR_app_stage: "dev"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
