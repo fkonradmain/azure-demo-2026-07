@@ -1,0 +1,49 @@
+name: 'Tofu'
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tofu:
+    name: 'Tofu'
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Install the latest version of Tofu CLI
+    - name: Setup Tofu
+      uses: opentofu/setup-opentofu@v2
+      with:
+        chdir: terraform/app
+
+    # Initialize a new or existing Tofu working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Tofu Init
+      run: tofu init
+
+    # Checks that all Tofu configuration files adhere to a canonical format
+    - name: Tofu Format
+      run: tofu fmt -check
+
+    # Generates an execution plan for Tofu
+    - name: Tofu Plan
+      run: tofu plan -input=false
+
+      # On push to "master", build or change infrastructure according to Tofu configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Tofu Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Tofu Apply
+      if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
+      run: tofu apply -auto-approve -input=false
