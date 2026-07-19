@@ -1,6 +1,8 @@
 name: "Tofu"
 
 on:
+  schedule:
+    - cron: "0 * * * *"
   push:
     branches: ["master"]
   pull_request:
@@ -15,10 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     env:
-      # ARM_SUBSCRIPTION_ID: "4b01b122-02ef-440c-a7d0-85cf2a54b7a9"
-      # ARM_TENANT_ID: "b2748d0a-856e-4184-bda8-831f9ffa8a48"
-      # ARM_CLIENT_ID: "e6b7ba11-9782-456c-a8c1-b92b77d18be3"
-      # TODO: import TF_VAR variables as github environment variables
       TF_VAR_azure_rg_name: ${{ secrets.TF_VAR_azure_rg_name }}
       TF_VAR_app_stage: ${{ vars.TF_VAR_app_stage }}
 
