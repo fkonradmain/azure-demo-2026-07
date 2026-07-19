@@ -34,9 +34,9 @@ jobs:
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
-          client-id: "4b01b122-02ef-440c-a7d0-85cf2a54b7a9"
+          client-id: "e6b7ba11-9782-456c-a8c1-b92b77d18be3"
           tenant-id: "b2748d0a-856e-4184-bda8-831f9ffa8a48"
-          subscription-id: "e6b7ba11-9782-456c-a8c1-b92b77d18be3"
+          subscription-id: "4b01b122-02ef-440c-a7d0-85cf2a54b7a9"
 
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
