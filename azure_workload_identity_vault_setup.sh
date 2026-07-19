@@ -5,7 +5,7 @@ set -euo pipefail
 # 1 Install Mutating admission webhook
 # Set Azure specific environment variables
 # TENANT_ID="b2748d0a-856e-4184-bda8-831f9ffa8a48"
-AZ_CLUSTER_NAME="app-workload-aks-dev-uiwlm"
+AZ_CLUSTER_NAME="app-workload-aks-dev-fgil1"
 RESOURCE_GROUP="RG-Fabian-Konrad"
 # LOCATION="westeurope"
 
@@ -28,11 +28,11 @@ helm upgrade workload-identity-webhook azure-workload-identity/workload-identity
 # 2. Export environment variables
 
 # environment variables for the Azure Key Vault resource
-KEYVAULT_NAME="aks-keyvault-dev-byjye"
+KEYVAULT_NAME="aks-keyvault-dev-2nyds"
 
 # environment variables for the user-assigned managed identity
-#USER_ASSIGNED_IDENTITY_NAME="app-workload-aks-dev-uiwlm-unprivileged-identity"
-USER_ASSIGNED_IDENTITY_NAME="app-workload-aks-dev-uiwlm-privileged-identity"
+#USER_ASSIGNED_IDENTITY_NAME="${AZ_CLUSTER_NAME}-unprivileged-identity"
+USER_ASSIGNED_IDENTITY_NAME="${AZ_CLUSTER_NAME}-privileged-identity"
 
 # environment variables for the Kubernetes service account & federated identity credential
 #SERVICE_ACCOUNT_NAMESPACE="default"
