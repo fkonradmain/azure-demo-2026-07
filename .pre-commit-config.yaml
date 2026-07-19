@@ -1,0 +1,65 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args:
+          - --allow-multiple-documents
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      # TODO: duplicate with remove-crlf
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: detect-private-key
+      # - id: no-commit-to-branch
+      - id: check-json
+      - id: pretty-format-json
+        args:
+          - --autofix
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.6
+    hooks:
+      - id: remove-tabs
+      - id: remove-crlf
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        args: ["--config=.prettierrc"]
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: v0.0.18
+    hooks:
+      - id: forbid-binary
+  - repo: https://github.com/pecigonzalo/pre-commit-shfmt
+    rev: v2.2.0
+    hooks:
+      - id: shell-fmt
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        # args:
+        #   - "--exclude=SC1091"
+  - repo: https://github.com/gitleaks/gitleaks.git
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+        # args: ["--gitleaks-ignore-path=.gitleaksignore"]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.108.0
+    hooks:
+      - id: terraform_fmt
+        args: ["--hook-config=--parallelism-ci-cpu-cores=2"]
+      # TODO: add back other terraform steps
+      # TODO: avoid collission opentofu <-> terraform in the precommit hooks
+      # - id: terraform_tflint
+      # - id: terraform_providers_lock
+      # - id: terraform_checkov
+      # - id: terraform_trivy
+      #   args: ["--hook-config=--parallelism-ci-cpu-cores=2"]

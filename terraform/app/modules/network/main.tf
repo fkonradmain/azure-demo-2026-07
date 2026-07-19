@@ -52,16 +52,16 @@ resource "azurerm_virtual_network" "app_vnet" {
 # Create a DNS zone for all private link connections
 resource "azurerm_private_dns_zone" "private_endpoints_dns" {
   # name                = "privatelink-${var.app_stage}.azure.net"
-  name = 	"privatelink.vaultcore.azure.net" # TODO: check if privatelink also supports Storage accounts in the current configuration
+  name                = "privatelink.vaultcore.azure.net" # TODO: check if privatelink also supports Storage accounts in the current configuration
   resource_group_name = var.azure_rg_name
 }
 
 # Connect DNS zone to the whole vnet
 resource "azurerm_private_dns_zone_virtual_network_link" "private_endpoints_dns_vnet_link" {
-  name                  = "privatelink-${var.app_stage}.azure.net"
+  name                = "privatelink-${var.app_stage}.azure.net"
   resource_group_name = var.azure_rg_name
 
   private_dns_zone_name = azurerm_private_dns_zone.private_endpoints_dns.name
   virtual_network_id    = azurerm_virtual_network.app_vnet.id
-  registration_enabled = true
+  registration_enabled  = true
 }

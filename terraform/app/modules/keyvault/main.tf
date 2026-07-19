@@ -1,8 +1,8 @@
 # Unique random string to allow collission free keyvault generation
 resource "random_string" "app_suffix" {
- length  = 5
- special = false
- upper   = false
+  length  = 5
+  special = false
+  upper   = false
 }
 # Get current AzureRM client config. This is needed to retrieve the tenant id
 data "azurerm_client_config" "current" {}
@@ -39,9 +39,9 @@ resource "azurerm_key_vault" "aks_keyvault" {
 
 # TODO: this is only an interim role to give all employees vault access. Remove it after testing
 resource "azurerm_role_assignment" "fk_vault_admin" {
- scope                = azurerm_key_vault.aks_keyvault.id
- role_definition_name = "Key Vault Administrator"
- principal_id         = "90bab22c-b512-44b9-aff4-9b787893291a" # All users user group
+  scope                = azurerm_key_vault.aks_keyvault.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = "90bab22c-b512-44b9-aff4-9b787893291a" # All users user group
 }
 
 resource "azurerm_private_endpoint" "keyvault_endpoint" {

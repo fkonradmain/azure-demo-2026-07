@@ -10,8 +10,8 @@ terraform {
   backend "azurerm" {
     storage_account_name = "tfstatefk"
     container_name       = "tfstatefk"
-    key = "bootstrap.tfstate"
-    resource_group_name = "RG-Fabian-Konrad"
+    key                  = "bootstrap.tfstate"
+    resource_group_name  = "RG-Fabian-Konrad"
   }
 }
 

@@ -19,18 +19,16 @@ helm repo add external-secrets https://charts.external-secrets.io
 helm repo update
 # The mutating webhook helm install might fail, if so, we can skip this step
 helm upgrade workload-identity-webhook azure-workload-identity/workload-identity-webhook \
-   --namespace azure-workload-identity-system \
-   --create-namespace \
-   --set azureTenantID="${AZURE_TENANT_ID}" \
-   --install \
-   --rollback-on-failure || true
-
+    --namespace azure-workload-identity-system \
+    --create-namespace \
+    --set azureTenantID="${AZURE_TENANT_ID}" \
+    --install \
+    --rollback-on-failure || true
 
 # 2. Export environment variables
 
 # environment variables for the Azure Key Vault resource
 KEYVAULT_NAME="aks-keyvault-dev-byjye"
-
 
 # environment variables for the user-assigned managed identity
 #USER_ASSIGNED_IDENTITY_NAME="app-workload-aks-dev-uiwlm-unprivileged-identity"
@@ -70,7 +68,7 @@ EOF
 # 7. Deploy workload
 # Install External Secrets Operator
 helm upgrade external-secrets \
-   external-secrets/external-secrets \
+    external-secrets/external-secrets \
     -n external-secrets \
     --create-namespace \
     --install \

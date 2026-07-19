@@ -39,11 +39,11 @@ resource "azurerm_storage_account" "tfstatefk" {
   lifecycle {
     prevent_destroy = true
   }
-  name                     = "tfstatefk"
-  resource_group_name      = data.azurerm_resource_group.rg_fk.name
-  location                 = data.azurerm_resource_group.rg_fk.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  name                            = "tfstatefk"
+  resource_group_name             = data.azurerm_resource_group.rg_fk.name
+  location                        = data.azurerm_resource_group.rg_fk.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
 }
 
@@ -65,7 +65,7 @@ resource "azurerm_storage_container" "tfstatefk" {
 #   id = "https://tfstatefk.blob.core.windows.net/tfstatefk/bootstrap.tfstate"
 #   to = azurerm_storage_blob.tfstatefk
 # }
-# 
+#
 # resource "azurerm_storage_blob" "tfstatefk" {
 #   name                   = "bootstrap.tfstate"
 #   type                   = "Block"

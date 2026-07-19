@@ -1,16 +1,16 @@
 # Unique random string to allow collission free storageaccount generation
 resource "random_string" "app_suffix" {
- length  = 5
- special = false
- upper   = false
+  length  = 5
+  special = false
+  upper   = false
 }
 
 resource "azurerm_storage_account" "app_storage" {
-  name                     = "appstorage${var.app_stage}${random_string.app_suffix.result}"
-  location            = var.azure_location
-  resource_group_name = var.azure_rg_name
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  name                            = "appstorage${var.app_stage}${random_string.app_suffix.result}"
+  location                        = var.azure_location
+  resource_group_name             = var.azure_rg_name
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
 }
 

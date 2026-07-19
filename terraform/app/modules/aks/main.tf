@@ -21,13 +21,13 @@ resource "azurerm_kubernetes_cluster" "workload_aks" {
   # private_cluster_enabled = true # TODO: recheck if we can get private clusters running
 
   default_node_pool {
-    name       = "default"
+    name                        = "default"
     temporary_name_for_rotation = "rotating"
-    node_count = 1
-    vm_size    = "Standard_d2_v5"
-    os_sku = "AzureLinux"
-    workload_runtime = "KataVmIsolation"
-    vnet_subnet_id = var.subnets.aks_node.id
+    node_count                  = 1
+    vm_size                     = "Standard_d2_v5"
+    os_sku                      = "AzureLinux"
+    workload_runtime            = "KataVmIsolation"
+    vnet_subnet_id              = var.subnets.aks_node.id
   }
 
   identity {
@@ -38,16 +38,16 @@ resource "azurerm_kubernetes_cluster" "workload_aks" {
   # Access profile to limit api server access
   api_server_access_profile {
     # authorized_ip_ranges = azurerm_virtual_network.app_vnet.address_space
-    subnet_id            = var.subnets.aks_api.id
+    subnet_id                           = var.subnets.aks_api.id
     virtual_network_integration_enabled = true # whatever this is, probably determines, that an IP address of the subnet is going to be used
   }
 
   # TODO: evaluate Active directory based access control
   azure_active_directory_role_based_access_control {
     admin_group_object_ids = [
-      "90bab22c-b512-44b9-aff4-9b787893291a"  # All users (only group available, Azure unfortunately requires groups)
-    ]                                         # TODO: use variable here
-    azure_rbac_enabled = true                 # User Azure RBAC instead of Kubernetes RBAC
+      "90bab22c-b512-44b9-aff4-9b787893291a" # All users (only group available, Azure unfortunately requires groups)
+    ]                                        # TODO: use variable here
+    azure_rbac_enabled = true                # User Azure RBAC instead of Kubernetes RBAC
   }
   oidc_issuer_enabled = true # mandatory for azure ad rbac
 
@@ -91,10 +91,9 @@ resource "azurerm_kubernetes_cluster" "workload_aks" {
   # web_app_routing {}
 
   # TODO: evaluate setting a node upgrade channel
-  # node_os_upgrade_channel = 
+  # node_os_upgrade_channel =
 
   # TODO: check if we need workload identitiy for kubernetes clusters
   # Run workloads with a specified workload identity
   workload_identity_enabled = true
 }
-

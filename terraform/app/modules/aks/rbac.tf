@@ -27,9 +27,9 @@ resource "azurerm_user_assigned_identity" "aks_privileged_workload_identity" {
 }
 
 resource "azurerm_role_assignment" "aks_workload_vault_admin" {
- scope                = var.aks_keyvault_id
- role_definition_name = "Key Vault Secrets Officer"
- principal_id         = azurerm_user_assigned_identity.aks_privileged_workload_identity.principal_id
+  scope                = var.aks_keyvault_id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_user_assigned_identity.aks_privileged_workload_identity.principal_id
 }
 
 # unprivileged identity
@@ -40,20 +40,20 @@ resource "azurerm_user_assigned_identity" "aks_unprivileged_workload_identity" {
 }
 
 resource "azurerm_role_assignment" "aks_workload_vault_read" {
- scope                = var.aks_keyvault_id
- role_definition_name = "Key Vault Secrets User"
- principal_id         = azurerm_user_assigned_identity.aks_unprivileged_workload_identity.principal_id
+  scope                = var.aks_keyvault_id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.aks_unprivileged_workload_identity.principal_id
 }
 
 locals {
-  privileged_namespaces = ["kube-system","kube-node-lease","external-secrets"]
-  unprivileged_namespaces = ["default","demo","kube-public"]
-  service_account_name = "workload-identity-sa"
+  privileged_namespaces   = ["kube-system", "kube-node-lease", "external-secrets"]
+  unprivileged_namespaces = ["default", "demo", "kube-public"]
+  service_account_name    = "workload-identity-sa"
 }
 
 # Federate privileged service accounts in the cluster
 resource "azurerm_federated_identity_credential" "privileged_sa_federated_credential" {
-  for_each = { for _,item in local.privileged_namespaces : item => item }
+  for_each                  = { for _, item in local.privileged_namespaces : item => item }
   name                      = "aks-privileged-federated-credential-${each.value}-${var.app_stage}"
   audience                  = ["api://AzureADTokenExchange"]
   issuer                    = azurerm_kubernetes_cluster.workload_aks.oidc_issuer_url
@@ -63,7 +63,7 @@ resource "azurerm_federated_identity_credential" "privileged_sa_federated_creden
 
 # Federate unprivileged service accounts in the cluster
 resource "azurerm_federated_identity_credential" "unprivileged_sa_federated_credential" {
-  for_each = { for _,item in local.unprivileged_namespaces : item => item }
+  for_each                  = { for _, item in local.unprivileged_namespaces : item => item }
   name                      = "aks-unprivileged-federated-credential-${each.value}-${var.app_stage}"
   audience                  = ["api://AzureADTokenExchange"]
   issuer                    = azurerm_kubernetes_cluster.workload_aks.oidc_issuer_url

@@ -10,8 +10,8 @@ terraform {
   backend "azurerm" {
     storage_account_name = "tfstatefk"
     container_name       = "tfstatefk"
-    key = "dev.tfstate" # TODO: allow using stage variables for the name of the terraform state file
-    resource_group_name = "RG-Fabian-Konrad"
+    key                  = "dev.tfstate" # TODO: allow using stage variables for the name of the terraform state file
+    resource_group_name  = "RG-Fabian-Konrad"
   }
 }
 
