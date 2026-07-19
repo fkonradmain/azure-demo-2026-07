@@ -12,12 +12,14 @@ terraform {
     container_name       = "tfstatefk"
     key                  = "dev.tfstate" # TODO: allow using stage variables for the name of the terraform state file
     resource_group_name  = "RG-Fabian-Konrad"
+    use_oidc             = true
   }
 }
 
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {}
+  use_oidc = true
 
   #use_msi = true
   #...
