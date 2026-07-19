@@ -1,7 +1,4 @@
 name: 'Tofu'
-defaults:
-  run:
-    working-directory: terraform/app
 
 on:
   push:
@@ -21,6 +18,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: terraform/app
 
     steps:
     # Checkout the repository to the GitHub Actions runner
