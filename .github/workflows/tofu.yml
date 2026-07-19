@@ -13,7 +13,7 @@ jobs:
   tofu:
     name: "Tofu"
     runs-on: ubuntu-latest
-    environment: production
+    environment: dev
     env:
       #ARM_USE_MSI: true
       #ARM_MSI_API_VERSION: "2019-08-01" # optional, defaults to 2018-02-01. Some Azure services require a newer API version due to local implementation conditions. e.g. Running in Azure Container Apps requires `2019-08-01`.

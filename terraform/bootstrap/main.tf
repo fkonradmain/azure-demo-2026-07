@@ -21,12 +21,12 @@ resource "azurerm_role_assignment" "github_contributor_access" {
 # }
 
 # Federate user assigned identity with GitHub repo
-resource "azurerm_federated_identity_credential" "fk_github_terraform" {
+resource "azurerm_federated_identity_credential" "fk_github_terraform_master" {
   name                      = "fk-github-terraform"
   audience                  = ["api://AzureADTokenExchange"]
   issuer                    = "https://token.actions.githubusercontent.com"
   user_assigned_identity_id = azurerm_user_assigned_identity.fk_github_terraform.id
-  subject                   = "repo:fkonradmain/azure-demo-2026-07:ref:refs/heads/master"
+  subject                   = "repo:fkonradmain@88140888/azure-demo-2026-07:ref:refs/heads/master"
 }
 
 # TF state store
