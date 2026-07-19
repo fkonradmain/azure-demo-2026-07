@@ -1,4 +1,7 @@
 name: 'Tofu'
+defaults:
+  run:
+    working-directory: ${{ env.tf_actions_working_dir }}
 
 on:
   push:
@@ -27,8 +30,6 @@ jobs:
     # Install the latest version of Tofu CLI
     - name: Setup Tofu
       uses: opentofu/setup-opentofu@v2
-      with:
-        chdir: terraform/app
 
     # Initialize a new or existing Tofu working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Tofu Init
