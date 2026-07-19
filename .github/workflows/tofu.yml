@@ -19,7 +19,7 @@ jobs:
       #ARM_MSI_API_VERSION: "2019-08-01" # optional, defaults to 2018-02-01. Some Azure services require a newer API version due to local implementation conditions. e.g. Running in Azure Container Apps requires `2019-08-01`.
       ARM_SUBSCRIPTION_ID: '"4b01b122-02ef-440c-a7d0-85cf2a54b7a9"'
       ARM_TENANT_ID: '"b2748d0a-856e-4184-bda8-831f9ffa8a48"'
-      ARM_CLIENT_ID: '"e6b7ba11-9782-456c-a8c1-b92b77d18be3"' # only necessary for user assigned identity
+      ARM_CLIENT_ID: '"e6b7ba11-9782-456c-a8c1-b92b77d18be3"'
       # TODO: import TF_VAR variables as github environment variables
       TF_VAR_azure_rg_name: '"RG-Fabian-Konrad"'
       TF_VAR_app_stage: '"dev"'
@@ -34,9 +34,9 @@ jobs:
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.ARM_CLIENT_ID }}
-          tenant-id: ${{ secrets.ARM_TENANT_ID }}
-          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          client-id: "4b01b122-02ef-440c-a7d0-85cf2a54b7a9"
+          tenant-id: "b2748d0a-856e-4184-bda8-831f9ffa8a48"
+          subscription-id: "e6b7ba11-9782-456c-a8c1-b92b77d18be3"
 
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
